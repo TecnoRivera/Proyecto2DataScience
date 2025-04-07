@@ -6,13 +6,13 @@ import seaborn as sns
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler, label_binarize
-from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc, RocCurveDisplay
 from ucimlrepo import fetch_ucirepo
 
 # Configuracion
 st.set_page_config(page_title="Glass Type Classification", layout="wide")
-st.title("Clasificación de Tipos de Vidrio con ExtraTreesClassifier")
+st.title("Clasificación de Tipos de Vidrio con RandomForestClassifier")
 
 # Cargar dataset
 glass_data = fetch_ucirepo(id=42)
@@ -32,14 +32,14 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # GridSearch para mejores hiperparámetros
-st.subheader("Entrenamiento del Modelo ExtraTreesClassifier")
+st.subheader("Entrenamiento del Modelo RandomForestClassifier")
 params = {
     'n_estimators': [100, 200],
     'max_depth': [None, 10, 20],
     'min_samples_split': [2, 5]
 }
 
-grid = GridSearchCV(ExtraTreesClassifier(random_state=42), params, cv=5, scoring='f1_macro', n_jobs=-1)
+grid = GridSearchCV(RandomForestClassifier(random_state=42), params, cv=5, scoring='f1_macro', n_jobs=-1)
 grid.fit(X_train, y_train)
 
 st.write("**Mejores hiperparámetros:**", grid.best_params_)
@@ -75,8 +75,8 @@ for i in range(len(classes)):
 ax.plot([0, 1], [0, 1], 'k--')
 ax.set_xlabel("False Positive Rate")
 ax.set_ylabel("True Positive Rate")
-ax.set_title("ROC Curve - ExtraTreesClassifier")
+ax.set_title("ROC Curve - RandomForestClassifier")
 ax.legend(loc="lower right")
 st.pyplot(fig)
 
-st.success("Modelo ExtraTreesClassifier entrenado y evaluado correctamente.")
+st.success("Modelo RandomForestClassifier entrenado y evaluado correctamente.")
